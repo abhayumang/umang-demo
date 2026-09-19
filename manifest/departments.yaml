@@ -8,5 +8,6 @@ departments:
   - { id: dept-03, wave: wave1,  window: "00:00-23:59" }
   - { id: dept-04, wave: wave2,  window: "00:00-23:59" }
   - { id: dept-05, wave: wave2,  window: "00:00-23:59" }
+  - { id: dept-06, wave: wave2,  window: "12:15-13:30" }
   # Demo ke liye is window ko "abhi ka time + 5 minute" par set kar dena
   - { id: dept-06, wave: wave2,  window: "23:00-23:30" }
