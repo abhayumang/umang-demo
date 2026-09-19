@@ -1,0 +1,72 @@
+# Jenkins + 6 dummy "departments" (Tomcat containers).
+# MinIO aapka pehle se chal raha container hai; use is network se jodna hai (README dekhein).
+
+x-dept: &dept
+  build: ./dept
+  restart: unless-stopped
+  mem_limit: 384m
+  networks: [umang-net]
+
+services:
+  jenkins:
+    build:
+      context: ./jenkins
+    container_name: umang-jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      - TZ=Asia/Kolkata
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks: [umang-net]
+
+  dept-01:
+    <<: *dept
+    container_name: dept-01
+    hostname: dept-01
+    environment: { DEPT_NAME: dept-01, TZ: Asia/Kolkata }
+    ports: ["8081:8080"]
+
+  dept-02:
+    <<: *dept
+    container_name: dept-02
+    hostname: dept-02
+    environment: { DEPT_NAME: dept-02, TZ: Asia/Kolkata }
+    ports: ["8082:8080"]
+
+  dept-03:
+    <<: *dept
+    container_name: dept-03
+    hostname: dept-03
+    environment: { DEPT_NAME: dept-03, TZ: Asia/Kolkata }
+    ports: ["8083:8080"]
+
+  dept-04:
+    <<: *dept
+    container_name: dept-04
+    hostname: dept-04
+    environment: { DEPT_NAME: dept-04, TZ: Asia/Kolkata }
+    ports: ["8084:8080"]
+
+  dept-05:
+    <<: *dept
+    container_name: dept-05
+    hostname: dept-05
+    environment: { DEPT_NAME: dept-05, TZ: Asia/Kolkata }
+    ports: ["8085:8080"]
+
+  dept-06:
+    <<: *dept
+    container_name: dept-06
+    hostname: dept-06
+    environment: { DEPT_NAME: dept-06, TZ: Asia/Kolkata }
+    ports: ["8086:8080"]
+
+volumes:
+  jenkins_home:
+
+networks:
+  umang-net:
+    name: umang-net

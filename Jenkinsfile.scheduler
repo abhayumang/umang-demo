@@ -1,0 +1,27 @@
+// Job: umang-scheduler -> har 2 minute me dekhta hai kaun se department approved version se peeche hain
+// aur unki maintenance window khuli hai, unhe deploy karta hai (alag-alag time par deploy).
+properties([
+    pipelineTriggers([cron('H/2 * * * *')]),
+    parameters([
+        string(name: 'BATCH_SIZE', defaultValue: '2', description: 'Ek saath kitne departments parallel')
+    ]),
+    disableConcurrentBuilds()
+])
+
+timestamps {
+    node {
+        stage('Check approved version') {
+            checkout scm
+        }
+
+        def rollout = load 'scripts/rollout.groovy'
+        def manifest = readYaml file: 'manifest/departments.yaml'
+        def approved = sh(script: 'bash scripts/state.sh get approved.version', returnStdout: true).trim()
+
+        if (!approved) {
+            echo 'Abhi koi approved version nahi hai, kuch deploy nahi karna'
+        } else {
+            rollout.catchUp(manifest, approved, params.BATCH_SIZE.toInteger())
+        }
+    }
+}

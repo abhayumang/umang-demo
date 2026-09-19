@@ -1,0 +1,24 @@
+// Job: umang-rollout -> waves + batches me departments par deploy (canary, approval, rollback).
+properties([
+    parameters([
+        string(name: 'VERSION', defaultValue: '', description: 'Deploy karne wala version, jaise 1.0.7'),
+        string(name: 'BATCH_SIZE', defaultValue: '2', description: 'Ek saath kitne departments parallel deploy honge'),
+        booleanParam(name: 'AUTO_PROMOTE', defaultValue: false, description: 'true = waves ke beech approval nahi maangega')
+    ]),
+    disableConcurrentBuilds()
+])
+
+timestamps {
+    node {
+        stage('Prepare') {
+            checkout scm
+            if (!params.VERSION?.trim()) {
+                error 'VERSION parameter dena zaroori hai (jaise 1.0.7)'
+            }
+        }
+
+        def rollout = load 'scripts/rollout.groovy'
+        def manifest = readYaml file: 'manifest/departments.yaml'
+        rollout.runRollout(manifest, params.VERSION.trim(), params.BATCH_SIZE.toInteger(), params.AUTO_PROMOTE)
+    }
+}

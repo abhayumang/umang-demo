@@ -1,0 +1,12 @@
+# Department manifest: kaun si wave me hai aur kab deploy ho sakta hai.
+# window = "HH:MM-HH:MM" (Jenkins container ka time, Asia/Kolkata).
+# Window band ho to rollout us department ko skip karta hai aur scheduler window khulne par deploy karta hai.
+waves: [canary, wave1, wave2]
+departments:
+  - { id: dept-01, wave: canary, window: "00:00-23:59" }
+  - { id: dept-02, wave: wave1,  window: "00:00-23:59" }
+  - { id: dept-03, wave: wave1,  window: "00:00-23:59" }
+  - { id: dept-04, wave: wave2,  window: "00:00-23:59" }
+  - { id: dept-05, wave: wave2,  window: "00:00-23:59" }
+  # Demo ke liye is window ko "abhi ka time + 5 minute" par set kar dena
+  - { id: dept-06, wave: wave2,  window: "23:00-23:30" }
