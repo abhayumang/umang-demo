@@ -55,12 +55,11 @@ git push -> Jenkins build (WAR) -> MinIO (versioned) -> rollout job -> canary ->
 - "Scripts not permitted to use method ...": Manage Jenkins -> In-process Script Approval -> Approve.
 - Ports 8080-8086 busy hon to `docker-compose.yml` me ports badaliye.
 - Docker Desktop ko kam se kam 4 GB RAM dijiye.
-- MinIO secret key me `@` ya `/` na ho (scripts URL me use karte hain).
 
 ## AWS par jaate waqt kya badlega
 | Local | AWS |
 |---|---|
-| MinIO | S3 (versioning on) |
+| MinIO (`aws s3 --endpoint-url`) | S3: `MINIO_ENDPOINT` khali karo, scripts wahi rahenge (versioning on) |
 | Tomcat manager se deploy | SSM Run Command ya CodeDeploy |
 | Dept containers | Department EC2 / ASG (tags se target) |
 | pollSCM | GitHub webhook |

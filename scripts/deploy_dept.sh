@@ -11,7 +11,7 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 echo "[$DEPT] downloading umang $VERSION from MinIO"
-mc cp "minio/${BUCKET}/umang/${VERSION}/umang.war" "$TMP/umang.war" >/dev/null
+s3 cp "s3://${BUCKET}/umang/${VERSION}/umang.war" "$TMP/umang.war" --only-show-errors
 
 echo "[$DEPT] deploying $VERSION"
 OUT="$(curl -sS -m 60 -u "${TOMCAT_USER}:${TOMCAT_PASSWORD}" -T "$TMP/umang.war" \
